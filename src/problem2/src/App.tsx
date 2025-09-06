@@ -11,7 +11,7 @@ function App() {
             <div className="flex min-h-screen w-full items-center justify-center bg-gradient-to-br from-[#B3ECFF] via-[#E4D9FF] to-[#ECE0FF]">
                 <SwapForm />
             </div>
-            <Toaster />
+            <Toaster position="top-center" richColors />
         </QueryClientProvider>
     );
 }

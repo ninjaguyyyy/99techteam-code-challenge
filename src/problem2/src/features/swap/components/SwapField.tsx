@@ -5,7 +5,7 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/comp
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import TokenSelect from '@/features/swap/components/TokenSelect';
-import { TOKENS } from '@/features/swap/constants';
+import { Token } from '@/features/swap/types';
 
 type SwapFieldProps<T extends FieldValues> = {
     control: Control<T>;
@@ -13,6 +13,7 @@ type SwapFieldProps<T extends FieldValues> = {
     tokenName: Path<T>;
     amountName: Path<T>;
     readOnly?: boolean;
+    options: Token[];
 };
 
 export default function SwapField<T extends FieldValues>({
@@ -21,6 +22,7 @@ export default function SwapField<T extends FieldValues>({
     tokenName,
     amountName,
     readOnly,
+    options,
 }: SwapFieldProps<T>) {
     return (
         <FormField
@@ -40,7 +42,7 @@ export default function SwapField<T extends FieldValues>({
                                     <TokenSelect
                                         token={f.value}
                                         onSelect={f.onChange}
-                                        options={TOKENS}
+                                        options={options}
                                     />
                                 )}
                             />
@@ -48,12 +50,12 @@ export default function SwapField<T extends FieldValues>({
                                 <FormControl>
                                     <Input
                                         readOnly={readOnly}
-                                        value={
-                                            readOnly ? ((field.value as string) ?? '') : undefined
+                                        value={(field.value as string) ?? ''}
+                                        onChange={(e) =>
+                                            field.onChange(e.target.value.replace(/[^0-9.]/g, ''))
                                         }
                                         type="number"
                                         inputMode="decimal"
-                                        onChange={(e) => field.onChange(e.target.value)}
                                         placeholder="0.00"
                                         className={cn(
                                             'no-spinner h-12 w-[140px] rounded-2xl border-0 bg-transparent text-right tracking-tight !shadow-none sm:w-[200px]',
